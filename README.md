@@ -1,5 +1,7 @@
 # naldodj-hb-huffman
 
+![Huffman Banner](img/hbhuffman.svg)
+
 Bem-vindo ao `naldodj-hb-huffman`, uma implementação do algoritmo de Huffman em Harbour, projetada para fins de estudo e aprendizado. Este projeto oferece uma abordagem prática para explorar os conceitos de compressão e descompressão de dados sem perdas, utilizando uma linguagem moderna como Harbour combinada com otimizações em C.
 
 ## Sobre o Projeto
