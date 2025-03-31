@@ -3,6 +3,10 @@
    Entries may not always be in chronological/commit order.
    See license at the end of file. */
 
+2025-03-31 16:45 UTC naldodj (huffmannode: initial commit)
+  + .gitattributes
+  + .gitignore
+
 2025-03-31 16:43 UTC naldodj (huffmannode: initial commit)
   + bin/3rdpatch.hb
   + bin/check.hb
