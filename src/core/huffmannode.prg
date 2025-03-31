@@ -66,12 +66,10 @@ method BuildHuffmanTree(cText as character,hFreq as hash) class HuffmanNode
    self:oHuffmanTree:=HuffmanNode():New("",0,nil,nil)
    self:hHuffmanMap:={=>}
 
-   if (HB_ISHash(hFreq))  // Se hFreq for fornecido,use-o diretamente
-      // Nada a fazer aqui,já temos as frequências
-   else  // Caso contrário,calcular a partir do texto
+   if (!HB_ISHash(hFreq).or.Empty(hFreq))
       hFreq:={=>}
       cRemainingText:=cText
-      while (hb_BLen(cRemainingText) > 0)
+      while (hb_BLen(cRemainingText)>0)
          cChar:=hb_BSubStr(cRemainingText,1,1)
          hFreq[cChar]:=StrOccurs(cChar,@cRemainingText)
       end while
@@ -91,9 +89,9 @@ method BuildHuffmanTree(cText as character,hFreq as hash) class HuffmanNode
    while (Len(aNodes) > 1)
       aNodes:=aSort(aNodes,{|x,y| x:nFreq < y:nFreq})
       oLeft:=aNodes[1]
-      hb_ADel(aNodes,1,.T.)
+      hb_aDel(aNodes,1,.T.)
       oRight:=aNodes[1]
-      hb_ADel(aNodes,1,.T.)
+      hb_aDel(aNodes,1,.T.)
       oNode:=HuffmanNode():New(nil,oLeft:nFreq + oRight:nFreq,oLeft,oRight)
       aAdd(aNodes,oNode)
    end while
@@ -112,7 +110,7 @@ method procedure BuildHuffmanMap(oNode as object,cCode as character) class Huffm
 
       oCurrent:=aStack[Len(aStack)][1]
       cCurrentCode:=aStack[Len(aStack)][2]
-      hb_ADel(aStack,Len(aStack),.T.)
+      hb_aDel(aStack,Len(aStack),.T.)
 
       if (oCurrent:isLeaf())
          self:hHuffmanMap[oCurrent:cChar]:=cCurrentCode
