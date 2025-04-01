@@ -19,9 +19,10 @@ REQUEST HB_CODEPAGE_UTF8EX
 class HuffmanNode
 
    data cChar as character
-   data nFreq as numeric
 
    data hHuffmanMap as hash
+
+   data nFreq as numeric
 
    data oLeft as object
    data oRight as object
@@ -70,7 +71,7 @@ method BuildHuffmanTree(cText as character,hFreq as hash) class HuffmanNode
       hFreq:={=>}
       cRemainingText:=cText
       while (hb_BLen(cRemainingText)>0)
-         cChar:=hb_BSubStr(cRemainingText,1,1)
+         cChar:=hb_BLeft(cRemainingText,1)
          hFreq[cChar]:=StrOccurs(cChar,@cRemainingText)
       end while
    endif
@@ -92,7 +93,7 @@ method BuildHuffmanTree(cText as character,hFreq as hash) class HuffmanNode
       hb_aDel(aNodes,1,.T.)
       oRight:=aNodes[1]
       hb_aDel(aNodes,1,.T.)
-      oNode:=HuffmanNode():New(nil,oLeft:nFreq + oRight:nFreq,oLeft,oRight)
+      oNode:=HuffmanNode():New(nil,oLeft:nFreq+oRight:nFreq,oLeft,oRight)
       aAdd(aNodes,oNode)
    end while
 
@@ -146,7 +147,7 @@ method HuffmanCompress(cText as character) class HuffmanNode
 
    // Copiar hFreq do processo de BuildHuffmanTree
    while (hb_BLen(cRemainingText) > 0)
-      cChar:=hb_BSubStr(cRemainingText,1,1)
+      cChar:=hb_BLeft(cRemainingText,1)
       hFreq[cChar]:=StrOccurs(cChar,@cRemainingText)
    end while
 
@@ -194,16 +195,22 @@ method RebuildHuffmanTree(hMap as hash) class HuffmanNode
    return(oRoot) as object
 
 method HuffmanDecompress(hCompressed as hash) class HuffmanNode
+
    local cBit as character
    local cEncoded as character
    local cDecoded as character:=""
+
    local hFreq as hash
+
    local i as numeric
+
    local nBitLen as numeric
+
    local oNode as object
    local oRoot as object
 
    begin sequence
+
       if (!(hb_hHasKey(hCompressed,"freq") .and. hb_hHasKey(hCompressed,"data")))
          break
       endif
@@ -217,6 +224,7 @@ method HuffmanDecompress(hCompressed as hash) class HuffmanNode
       self:oHuffmanTree:=self:BuildHuffmanTree(nil,@hFreq)  // Usa hFreq diretamente
       self:hHuffmanMap:={=>}
       self:BuildHuffmanMap(self:oHuffmanTree,"")
+
       oRoot:=self:oHuffmanTree
       if (oRoot==nil)
          break

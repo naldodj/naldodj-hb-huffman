@@ -1,0 +1,8 @@
+-w3 -es2
+
+-cpp
+
+./huffmannode.prg
+./huffmannode_tst.prg
+
+-o./${hb_name}
