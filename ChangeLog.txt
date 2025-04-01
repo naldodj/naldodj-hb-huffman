@@ -3,6 +3,10 @@
    Entries may not always be in chronological/commit order.
    See license at the end of file. */
 
+2025-04-01 12:19 UTC naldodj
+  * src/core/huffmannode.prg
+  * src/tst/huffmannode_tst.exe
+
 2025-04-01 08:56 UTC naldodj
   + src/tst/huffmannode_tst.hbp
   * src/core/huffmannode.prg

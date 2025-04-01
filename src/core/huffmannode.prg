@@ -60,6 +60,8 @@ method BuildHuffmanTree(cText as character,hFreq as hash) class HuffmanNode
    local cChar as character
    local cRemainingText as character
 
+   local nNodes as numeric
+
    local oNode as object
    local oLeft as object
    local oRight as object
@@ -81,20 +83,24 @@ method BuildHuffmanTree(cText as character,hFreq as hash) class HuffmanNode
       aAdd(aNodes,HuffmanNode():New(cChar,hFreq[cChar],nil,nil))
    next each
 
-   if (Len(aNodes)==0)
+   nNodes:=Len(aNodes)
+   if (nNodes==0)
       return(nil)
-   elseif (Len(aNodes)==1)
+   elseif (nNodes==1)
       return(aNodes[1]) as object
    endif
 
-   while (Len(aNodes) > 1)
-      aNodes:=aSort(aNodes,{|x,y| x:nFreq < y:nFreq})
+   while (nNodes>1)
+      aNodes:=aSort(aNodes,{|x,y|(x:nFreq<y:nFreq)})
       oLeft:=aNodes[1]
       hb_aDel(aNodes,1,.T.)
+      nNodes--
       oRight:=aNodes[1]
       hb_aDel(aNodes,1,.T.)
+      nNodes--
       oNode:=HuffmanNode():New(nil,oLeft:nFreq+oRight:nFreq,oLeft,oRight)
       aAdd(aNodes,oNode)
+      nNodes++
    end while
 
    return(aNodes[1]) as object
@@ -105,22 +111,25 @@ method procedure BuildHuffmanMap(oNode as object,cCode as character) class Huffm
 
    local cCurrentCode as character
 
+   local nStack as numeric:=1
+
    local oCurrent as object
 
-   while (Len(aStack)>0)
-
-      oCurrent:=aStack[Len(aStack)][1]
-      cCurrentCode:=aStack[Len(aStack)][2]
-      hb_aDel(aStack,Len(aStack),.T.)
-
+   while (nStack>0)
+      oCurrent:=aStack[nStack][1]
+      cCurrentCode:=aStack[nStack][2]
+      hb_aDel(aStack,nStack,.T.)
+      nStack--
       if (oCurrent:isLeaf())
          self:hHuffmanMap[oCurrent:cChar]:=cCurrentCode
       else
          if (oCurrent:oRight!=nil)
             aAdd(aStack,{oCurrent:oRight,cCurrentCode+"1"})
+            nStack++
          endif
          if (oCurrent:oLeft!=nil)
             aAdd(aStack,{oCurrent:oLeft,cCurrentCode+"0"})
+            nStack++
          endif
       endif
    end while
@@ -211,12 +220,12 @@ method HuffmanDecompress(hCompressed as hash) class HuffmanNode
 
    begin sequence
 
-      if (!(hb_hHasKey(hCompressed,"freq") .and. hb_hHasKey(hCompressed,"data")))
+      if (!((hb_hHasKey(hCompressed,"freq")).and.(hb_hHasKey(hCompressed,"data"))))
          break
       endif
 
       hFreq:=hCompressed["freq"]
-      if ((!HB_ISHash(hFreq)).or.(Len(hCompressed["data"])<1))
+      if ((!hb_IsHash(hFreq)).or.(Len(hCompressed["data"])<1))
          break
       endif
 
